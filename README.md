@@ -1,2 +1,2 @@
 # rustlinux_error_mb
-A microbenchmark for testing different Error inner types performance.
+A microbenchmark for testing performance of different Error inner types.
