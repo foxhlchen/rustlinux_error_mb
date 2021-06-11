@@ -67,67 +67,80 @@ mod bench {
         }
     }
 
-    fn use_result<F, V, E>(f: F) -> Result<V, E>
+    fn use_result<F, V, E>(n: i32, f: F) -> (i32, Result<V, E>)
     where
         F: Fn() -> Result<V, E>,
     {
-        for _ in 0..500000000 {
-            match f() {
+        let mut rt :i32 = 0;
+        for _ in 0..n {
+            rt = match f() {
                 Ok(_) => 0,
                 Err(_) => -1,
             };
         }
 
-        f()
+        (rt, f())
     }
 
     #[bench]
-    fn bench_nzi32(b: &mut Bencher) {
-        b.iter(|| {
-            for _ in 0..50000000 {
-                match use_result(return_nzi32) {
-                    Ok(_) => 0,
-                    Err(_) => -1,
-                };
-            }
-        });
+    fn bench_nzi32_100(b: &mut Bencher) {
+        b.iter(|| use_result(100, return_nzi32));
     }
 
     #[bench]
-    fn bench_nzi16(b: &mut Bencher) {
-        b.iter(|| {
-            for _ in 0..50000000 {
-                match use_result(return_nzi16) {
-                    Ok(_) => 0,
-                    Err(_) => -1,
-                };
-            }
-        });        
+    fn bench_nzi32_10000(b: &mut Bencher) {
+        b.iter(|| use_result(10000, return_nzi32));
     }
 
     #[bench]
-    fn bench_i32(b: &mut Bencher) {
-        b.iter(|| {
-            for _ in 0..50000000 {
-                match use_result(return_i32) {
-                    Ok(_) => 0,
-                    Err(_) => -1,
-                };
-            }
-        }); 
+    fn bench_nzi32_1000000(b: &mut Bencher) {
+        b.iter(|| use_result(1000000, return_nzi32));
     }
 
     #[bench]
-    fn bench_i16(b: &mut Bencher) {
-        b.iter(|| {
-            for _ in 0..50000000 {
-                match use_result(return_i16) {
-                    Ok(_) => 0,
-                    Err(_) => -1,
-                };
-            }
-        }); 
+    fn bench_nzi16_100(b: &mut Bencher) {
+        b.iter(|| use_result(100, return_nzi16));        
     }
+
+    #[bench]
+    fn bench_nzi16_10000(b: &mut Bencher) {
+        b.iter(|| use_result(10000, return_nzi16));        
+    }
+
+    #[bench]
+    fn bench_nzi16_1000000(b: &mut Bencher) {
+        b.iter(|| use_result(1000000, return_nzi16));        
+    }
+
+    #[bench]
+    fn bench_i32_100(b: &mut Bencher) {
+        b.iter(|| use_result(100, return_i32)); 
+    }
+
+    #[bench]
+    fn bench_i32_10000(b: &mut Bencher) {
+        b.iter(|| use_result(10000, return_i32)); 
+    }
+
+    #[bench]
+    fn bench_i32_1000000(b: &mut Bencher) {
+        b.iter(|| use_result(1000000, return_i32)); 
+    }    
+
+    #[bench]
+    fn bench_i16_100(b: &mut Bencher) {
+        b.iter(|| use_result(100, return_i16)); 
+    }
+
+    #[bench]
+    fn bench_i16_10000(b: &mut Bencher) {
+        b.iter(|| use_result(10000, return_i16)); 
+    }
+
+    #[bench]
+    fn bench_i16_1000000(b: &mut Bencher) {
+        b.iter(|| use_result(1000000, return_i16)); 
+    }    
 }
 
 fn main() {}
